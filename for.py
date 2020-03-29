@@ -24,8 +24,11 @@ for numero in range(0, 10):
         continue
         print (numero)
 
+
+
+
 # uso de for doble
-for numero in range(0,5):
+for numero in range(1,5):
     for numero1 in range(0,4):
         print(numero, numero1)
 
