@@ -13,10 +13,24 @@ for numero in range(0,10,2):
 
 
 # romper un for con el break
-
 for numero in range(0,10):
     print (numero)
     if (numero == 5):
         break
+
+# uso del coninue para dar un salto en el cliclo for en esa evaluación
+for numero in range(0, 10):
+    if (numero == 5):
+        continue
+        print (numero)
+
+# uso de for doble
+for numero in range(0,5):
+    for numero1 in range(0,4):
+        print(numero, numero1)
+
+
+
+
 
 
