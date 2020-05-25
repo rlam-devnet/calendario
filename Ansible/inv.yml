@@ -1,0 +1,19 @@
+---
+all:
+    children:
+        network:
+            children:
+                lan:
+                    children:
+                        access:
+                            hosts:
+                                access01:
+                                access02:
+                        core:
+                            hosts:
+                                core01:
+                                core02:
+                wan:
+                    hosts:
+                        wan01:
+                        wan02:

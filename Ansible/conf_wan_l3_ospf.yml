@@ -1,0 +1,26 @@
+---
+ - name: "PLAY:1 Configurar el L3 y protocolo de enrutamiento OSPF"
+   hosts: wan
+   tasks:
+       #- name: "TASK:1 Configuracion inicial de las interfaces"
+        # ios_interfaces:
+        #     config:
+        #         - name: "{{ item.name }}"
+        #           description: "{{ item.description }}"
+        #           enabled: True
+        #           duplex: full
+        #     state: merged
+         #loop: "{{ interfaces[inventory_hostname] }}"
+
+       - name: "TASK:2 Configurar el l3 de las interfaces"
+         ios_l3_interfaces:
+             config:
+                 - name: "{{ item.name }}"
+                   ipv4:
+                       - address "{{ item.ipv4 }}"
+         loop: "{{ interfaces[inventory_hostname] | selectattr('ospf') | list }}"
+
+       - name: "TASK:3 Guardar la configuracion despues de modificar"
+         ios_command:
+             commands:
+                 - write memory

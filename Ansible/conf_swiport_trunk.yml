@@ -1,0 +1,17 @@
+---
+ - name: "PLAY:1 Configure the interface with trunk mode"
+   hosts: lan
+   tasks:
+       - name: "TASK:6 Enable dot1q Trunks"
+         ios_config:
+           lines:
+               - switchport mode trunk
+           parents: interface {{ item.name }}
+         loop: "{{ interfaces[inventory_hostname] | selectattr('mode','equalto','trunk') | list }}"
+         register: conf_trunk
+         tags: dot1q
+
+
+       - name: "TASK:2 Pint changed"
+         debug:
+             msg: "{{ conf_trunk }}"

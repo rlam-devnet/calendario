@@ -1,0 +1,5 @@
+{% for vrrp in svi_interfaces %}
+interface {{ vrrp.name }}
+vrrp {{ vrrp.name.split('vlan')[1] }} priority {{ hst_vrrp_priority }}
+vrrp {{ vrrp.name.split('vlan')[1] }} ip {{ vrrp.ipv4 | ipv4(254) | ipaddr('address') }}
+{% endfor %}

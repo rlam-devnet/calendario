@@ -1,0 +1,5 @@
+{% for int in svi_interfaces %}
+interface {{ int.name }}
+ip ospf {{ ospf_process }} area {{ ospf_area }}
+ip ospf network point-to-point
+{% endfor %}

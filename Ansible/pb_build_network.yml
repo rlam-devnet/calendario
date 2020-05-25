@@ -1,0 +1,70 @@
+---
+- name: "PLAY:1 Configure All Lan Switches"
+  hosts: lan
+  tags: lan
+  tasks:
+    - name: "TASK:1 Configure the system with module ios_system"
+      ios_system:
+        hostname: "{{ inventory_hostname }}"
+        lookup_enabled: no
+        name_servers: "{{ name_servers }}"
+
+    - name: "TASK:2 Configure NTP Server"
+      ios_ntp:
+        server: "{{ ntp_server }}"
+        logging: true
+        state: present
+
+    - name: "TASK:3 Configure Interfaces"
+      ios_interfaces:
+          config:
+              - name: "{{ item.name }}"
+                description: "{{ item.description }}"
+                duplex: "{{ intf_duplex }}"
+                mtu: "{{ intf_mtu }}"
+                enabled: True
+          #state: merged
+      loop: "{{ interfaces[inventory_hostname] }}"
+      register: ios_intf
+
+    - name: "TASK:4 Configure Vlans"
+      ios_vlans:
+          config:
+              - name: "{{ item.name }}"
+                vlan_id: "{{ item.vlan_id }}"
+                state: active
+      loop: "{{ vlans }}"
+      tags: vlan
+
+
+    - name: "TASK:5 Configure L2 Trunks"
+      ios_l2_interfaces:
+          config:
+              - name: "{{ item.name }}"
+                trunk:
+                  allowed_vlans: "{{ vlans | map(attribute='vlan_id') | join(',') }}"
+                  encapsulation: dot1q
+      loop: "{{ interfaces[inventory_hostname] | selectattr('mode','equalto','trunk') | list }}"
+
+    - name: "TASK:6 Enable dot1q Trunks"
+      ios_config:
+        lines:
+            - switchport trunk encapsulation dot1q
+            - switchport mode trunk
+        parents: interface {{ item.name }}
+      loop: "{{ interfaces[inventory_hostname] | selectattr('mode','equalto','trunk') | list }}"
+      tags: dot1q
+
+    - name: "TASK:7 Configure L2 Access"
+      ios_l2_interfaces:
+          config:
+              - name: "{{ item.name }}"
+                access:
+                  vlan: "{{ item.vlan }}"
+          state: merged
+      loop: "{{ interfaces[inventory_hostname] | selectattr('mode','equalto','access') | list }}"
+
+    - name: "TASK:8 Save configuration"
+      ios_command:
+          commands:
+              - write memory

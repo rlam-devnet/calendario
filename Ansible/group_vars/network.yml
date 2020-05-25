@@ -1,0 +1,13 @@
+ansible_network_os: "ios"
+ansible_connection: network_cli
+ansible_user: "lab"
+ansible_password: "lab123"
+ansible_become: "yes"
+ansible_become_password: "admin123"
+ansible_become_method: "enable"
+name_servers:
+    - 172.16.133.250
+    - 172.16.133.251
+ntp_server: 172.16.133.17
+intf_duplex: full
+intf_mtu: "1500"

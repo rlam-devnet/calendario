@@ -1,0 +1,21 @@
+ansible_network_os: iosxe
+
+interfaces:
+      wan01:
+        - name: GigabitEthernet1
+          description: core01_g0
+          ipv4: 10.3.1.1 255.255.255.252
+          ospf: yes
+        - name: GigabitEthernet2
+          description: wan02_g2
+          ipv4: 10.4.1.1 255.255.255.252
+          ospf: yes
+      wan02:
+        - name: GigabitEthernet1
+          description: core02_g0
+          ipv4: 10.3.1.6 255.255.255.252
+          ospf: yes
+        - name: GigabitEthernet2
+          description: wan01_g2
+          ipv4: 10.4.1.2 255.255.255.252
+          ospf: yes

@@ -1,0 +1,4 @@
+{% for int in core_l3_links[inventory_hostname] %}
+interface {{ int.name }}
+ip address {{ int.ipv4 | ipv4(hst_svi_id_ospf) | ipaddr('address')}}
+{% endfor %}

@@ -1,0 +1,8 @@
+{% for device in interfaces[inventory_hostname] %}
+ list = []
+ list.append(device | selectattr('mode','equalto','trunk'))
+  {% for int in list %}
+  interface {{ int.name }}
+  switchport mode trunk
+{%  endfor %}
+{% endfor %}

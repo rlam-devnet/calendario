@@ -1,0 +1,33 @@
+---
+- name: "PLAY 3: Configure Core switch for OSPF"
+  hosts: core
+  tags: l3_core
+  tasks:
+
+        #  NOTA: no se puede utilizar para este modulo hasta el momento
+        # el formato cidr /30, hay que especificar en las variables el fomato completo
+        # Ejm: 1.1.1.1 255.255.255.0
+        - name: "TASK:2"
+          ios_l3_interfaces:
+            config:
+                - name: "{{ item.name }}"
+                  ipv4:
+                  - address: "{{ item.ipv4 }}"
+            state: merged
+          loop: "{{ core_l3_links[inventory_hostname] | selectattr('ospf') | list }}"
+
+        - name: "TASK:3 Configurar OSPF"
+          ios_config:
+              lines:
+                  - ip routing
+                  - router ospf 20191
+
+
+        - name: "TASK:4 Configurar valores de OSPF"
+          ios_config:
+              src: pb_l3_ospf.j2
+      #- name: "TASK:2 Configure OSPF passive Interfaces"
+        #ios_config:
+        #    parents: router ospf {{ ospf_process }}
+        #    lines: passive-interface {{ item.name }}
+        #loop: "{{ (svi_interfaces + core_l3_links[inventory_hostname]) | selectattr('ospf','equalto','passive') | list }}"
