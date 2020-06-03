@@ -1,0 +1,23 @@
+---
+- name: "System configuration"
+  template:
+      src: "{{ansible_network_os}}/mgmt.j2"
+      dest: "{{build_dir}}/00_mgmt.cfg"
+  tags: mgmt
+
+- name: "Interface Configuration"
+  template:
+      src: "{{ansible_network_os}}/inter.j2"
+      dest: "{{build_dir}}/01_intf.cfg"
+  tags: intf
+
+- name: "OSPF configuration"
+  template:
+      src: "{{ansible_network_os}}/ospf.j2"
+      dest: "{{build_dir}}/02_ospf.cfg"
+  tags: ospf
+
+- name: "MPLS configuration"
+  template:
+      src: "{{ansible_network_os}}/mpls.j2"
+      dest: "{{build_dir}}/03_mpls.cfg"

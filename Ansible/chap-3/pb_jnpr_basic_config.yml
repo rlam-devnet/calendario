@@ -1,0 +1,45 @@
+---
+ - name: "PLAY:1 Congigure basic device juniper"
+   hosts: junos
+   gather_facts: no
+   tasks:
+       - name: "TASK:1 configure system"
+         junos_system:
+             hostname: "{{ inventory_hostname }}"
+             name_servers: "{{ global.dns }}"
+             state: present
+
+       - name: "TASK:2 configure device users"
+         junos_user:
+             name: "{{ item.username }}"
+             role: "{{ item.role }}"
+             sshkey: "{{ lookup ('file', item.SSH_key) }}"
+         with_items: "{{ global.users | selectattr('SSH_key','defined') | list }}"
+
+       - name: "TASK:3 Configure the physical interfaces"
+         junos_interfaces:
+             config:
+                 - name: "{{ item.port }}"
+                   description: "peer:{{ item.peer }} remote_port:{{ item.pport }}"
+                   mtu: "{{ global.mtu }}"
+                   enabled: True
+         with_items: "{{ p2p_ip[inventory_hostname] }}"
+         tags: intf
+
+       #- name: "TASK:4 Delete interface configuration"
+        # junipernetworks.junos.junos_l3_interfaces:
+        #     config:
+        #         - name: "{{ item.port }}"
+        #     state: deleted
+         #with_items: "{{ p2p_ip[inventory_hostname] }}"
+
+       - name: "TASK:4 configure IP addresses"
+         junipernetworks.junos.junos_l3_interfaces:
+             config:
+                 - name: "{{ item.port }}"
+                   ipv4:
+                       - address: "{{ item.ip }}/{{ global.p2p_prefix }}"
+             state: merged
+         when:
+             - item.ip is defined
+         with_items: "{{ p2p_ip[inventory_hostname] }}"

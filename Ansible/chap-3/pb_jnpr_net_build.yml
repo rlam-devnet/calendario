@@ -1,0 +1,16 @@
+---
+ - name: "PLAY: 1 build juniper SP network"
+   hosts: junos
+   tasks:
+       - name: "Enable NETCONF"
+         junos_netconf:
+             netconf_port: 830
+             state: present
+         vars:
+             ansible_connection: network_cli
+         tags: netconf
+       - import_role:
+             name: build_router_config
+         vars:
+             ansible_connection: local
+         tags: build

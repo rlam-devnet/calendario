@@ -1,0 +1,21 @@
+system {
+    host-name {{inventory_hostname}};
+    no-redirects;
+{%  if global.dns is defined %}
+    name-server {
+{%      for dns_server in global.dns %}
+        {{dns_server}};
+{%      endfor %}
+   }
+{% endif %}
+    login {
+{%      for user in global.users if user.SSH_key is defined %}
+        user {{ user.username }} {
+            class {{ user.role }};
+            authentication {
+                ssh-rsa "{{lookup('file',user.SSH_key)}}"; ## SECRET-DATA
+            }
+        }
+{%      endfor %}
+    }
+}

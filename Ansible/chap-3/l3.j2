@@ -1,0 +1,5 @@
+{% for int in interfaces %}
+{% if int['unit'] is defined %}
+set interfaces {{ int.port }} unit {{ int.unit }} family inet address {{ int.ipv4_addr }}
+{% endif %}
+{% endfor %}

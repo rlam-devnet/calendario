@@ -1,0 +1,4 @@
+ansible_user: admin
+ansible_SSH_private_key_file: Ansible_SSH_key
+ansible_network_os: junos
+ansible_connection: netconf
