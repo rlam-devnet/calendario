@@ -1,0 +1,57 @@
+---
+ - name: "PLAY:1 Recuperando datos operacionales de los dispositivos IOS"
+   hosts: lan, core
+   vars:
+       config_folder: "configs"
+       op_folder: "op_data"
+       op_cmds:
+           - show ip ospf neighbor
+           - show ip route
+   tasks:
+       - name: "TASK:1 Crear los directorios para almacenar los datos"
+         block:
+             - name: "P1T1: Creamos los directorios"
+               file:
+                   path: "{{ config_folder }}"
+                   state: directory
+             - name: "Crear la carpeta para almacenar los datos de los cmds"
+               file:
+                   path: "{{ op_folder }}"
+                   state: directory
+         run_once: yes
+         delegate_to: localhost
+
+       - name: "P1T2: Recuperamos la configuracion actual de los dispositivos"
+         ios_command:
+             commands: show running-config
+         register: show_run
+# para que funcionara se tuvo que crear la carpeta en el directorio raiz
+# donde esta corriendo ansible
+       - name: "P1T3: Guardamos la configuración de cada dispositivo"
+         copy:
+             content: "{{ show_run.stdout[0] }}"
+             dest: configs/"{{ inventory_hostname }}.cfg"
+
+       - name: "P1T4: Creamos el directorio para cada dispositivo"
+         file:
+             path: "{{ op_folder }}/{{ inventory_hostname }}"
+             state: directory
+         delegate_to: localhost
+
+       - name: "P1T5: Obtenemos los datos operacionales de los dispositivos"
+         ios_command:
+             commands: "{{ item }}"
+         register: op_output
+         loop: "{{ op_cmds }}"
+
+       #- name: "tes prueba"
+        # debug:
+        #     msg: "{{ op_output }}"
+        # para que pueda funcioanr se debe crear la carpeta en el directorios
+        # raiz donde corre ansible
+       - name: "P1T6: Guardamos la salida de cada dispositivo"
+         copy:
+             content: "{{ item.stdout[0] }}"
+             dest: "{{ op_folder }}/{{ inventory_hostname }}/{{ item.item | replace(' ','_')}}.txt"
+
+         loop: "{{ op_output.results }}"

@@ -1,0 +1,30 @@
+---
+ - name: "PLAY:1 Obtener la información de todos los dispositivos"
+   hosts: core
+   vars:
+       host_id: 10
+       packet_count: 10
+   tasks:
+       - name: "TASK:1 obtener información y filtrar las direcciones IP"
+         set_fact:
+             all_svi_prefixes: "{{ svi_interfaces | selectattr('vrrp') | map(attribute='ipv4') | list }}"
+         run_once: yes
+         register: l3_interface
+         delegate_to: localhost
+         tags: svi
+
+       #- name: "TASK:2 Seleccionar el id asociado a la vlan de cada core"
+        # set_fact:
+        #     id_core: "{{ hst_svi_id[inventory_hostname] | list }}"
+
+       - name: "task prueba"
+         debug:
+             msg: "{{ l3_interface }}"
+
+
+       - name: "TASK:2 Con el modulo Ping verificamos el alcance de los equipos"
+         ios_ping:
+             dest: "{{ item | ipaddr(hst_svi_id) | ipaddr('address') }}"
+         loop: "{{ all_svi_prefixes }}"
+         ignore_errors: yes
+         tags: svi
