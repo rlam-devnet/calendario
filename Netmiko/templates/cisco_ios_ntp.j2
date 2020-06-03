@@ -1,0 +1,6 @@
+configure terminal
+{% for ntp in data.ntps %}
+ntp server {{ ntp }}
+{% endfor %}
+exit
+write memory
