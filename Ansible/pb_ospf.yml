@@ -22,10 +22,14 @@
                   - ip routing
                   - router ospf 20191
 
-
+       # configuramos ospf a nivel de interfaz con las vlan l3
         - name: "TASK:4 Configurar valores de OSPF"
           ios_config:
               src: pb_l3_ospf.j2
+
+        - name: "TASK:5 Guardamos la configuración"
+          ios_command:
+              commands: write memory
       #- name: "TASK:2 Configure OSPF passive Interfaces"
         #ios_config:
         #    parents: router ospf {{ ospf_process }}

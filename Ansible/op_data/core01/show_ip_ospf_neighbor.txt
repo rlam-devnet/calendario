@@ -1,0 +1,4 @@
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+172.20.1.251      0   FULL/  -        00:00:38    10.1.100.2      Vlan100
+172.20.1.251      0   FULL/  -        00:00:37    10.1.20.2       Vlan20
+172.20.1.251      0   FULL/  -        00:00:39    10.1.10.2       Vlan10

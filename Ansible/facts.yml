@@ -1,0 +1,10 @@
+# BEGIN ANSIBLE MANAGED BLOCK
+device_facts:
+  core01:
+      serial_number: 9W0L5YZX9NQ
+      ios_version: 15.2(4.0.55)E
+  core02:
+      serial_number: 911Y9XQDLEK
+      ios_version: 15.2(4.0.55)E
+all_loopbacks:
+# END ANSIBLE MANAGED BLOCK

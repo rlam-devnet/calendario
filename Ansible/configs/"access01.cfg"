@@ -1,0 +1,153 @@
+Building configuration...
+
+Current configuration : 3647 bytes
+!
+! Last configuration change at 13:38:28 UTC Tue May 26 2020
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname access01
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$mBtM$Os1irRgXP28PJfonM7zxQ.
+!
+username lab secret 5 $1$Jl9O$SUgdV2SLbAMbTQOdrCX/T/
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name ula.ve
+ip name-server 172.16.133.250
+ip name-server 172.16.133.251
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ description core01_e0/1
+ switchport trunk allowed vlan 10,20,100
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ description core02_e0/1
+ switchport trunk allowed vlan 10,20,100
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ description Data_vlan
+ switchport access vlan 10
+ switchport mode access
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ description OOB
+ no switchport
+ ip address dhcp
+ negotiation auto
+!
+ip default-gateway 172.16.133.2
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+line aux 0
+line vty 0 4
+ login local
+ transport input ssh
+!
+ntp logging
+ntp server 172.16.133.17
+!
+end

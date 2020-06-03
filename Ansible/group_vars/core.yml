@@ -4,18 +4,18 @@ core_vlans:
       interface: Ethernet0/3
 
 svi_interfaces:
-    - name: vlan10
+    - name: Vlan10
       ipv4: 10.1.10.0/24
       vrrp: yes
-      ospf: passive
-    - name: vlan20
+      ospf: yes
+    - name: Vlan20
       ipv4: 10.1.20.0/24
       vrrp: yes
-      ospf: passive
-    - name: vlan100
+      ospf: yes
+    - name: Vlan100
       ipv4: 10.1.100.0/24
       vrrp: yes
-      ospf: passive
+      ospf: yes
 
 core_l3_links:
        core01:
